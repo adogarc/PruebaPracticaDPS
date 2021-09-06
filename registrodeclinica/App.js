@@ -1,112 +1,92 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { useState, useEffect } from "react";
+import {  StatusBar, StyleSheet, Text, ScrollView, View,SafeAreaView, Dimensions} from "react-native";
+import Footer from "./src/component/footer";
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+//Archivos importados desde src/components
+import Form from './src/component/form';
+const{height}=Dimensions.get('window');
+export default function App() {
+   state={screenHeight:0,
   };
+  onContentSizeChange=(contentWidth, contentHeight)=>{
+    this.setState({screenHeight:contentHeight});
+  };
+  const scrollEnabled=this.state.screenHeight>height;
+    const[nombre, setNombre]=useState(null);
+    const [apellido, setApellido]=useState(null);
+    const [sexo, setSexo]=useState(null);
+    const [dui, setDui] = useState(null);
+    const[nit, setNit]=useState(null);
+    const [fecha, setFecha]=useState(null);
+    const [nacionalidad, setNacionalidad]=useState(null);
+    const [departamento, setDepartamento] = useState(null);
+    const [municipio, setMunicipio]=useState(null);
+    const [dirección, setDireccion] = useState(null);
+    //validacion
+    useEffect(() => {
+      if (nombre && apellido && sexo && dui && nit && fecha && nacionalidad && departamento && municipio && dirección) ingresarDatos();
+        
+      }, [nombre, apellido, sexo,dui,nit,fecha,nacionalidad,departamento,municipio,dirección]);
+      const ingresarDatos = () => {
+      if (!nombre) {
+        setErrorMessage('Debes añadir un nombre');
+        } else if (!apellido) {
+        setErrorMessage('Debes añadir un apellido');
+        } else if (!sexo) {
+        setErrorMessage('Debes seleccionar tu sexo');
+        }else if (!dui) {
+          setErrorMessage('Debes añadir tu dui');
+        }else if (!nit) {
+            setErrorMessage('Debes añadir tu nit');
+        }else if (!fecha) {
+              setErrorMessage('Debes añadir tu fecha de nacimiento');
+        }else if (!nacionalidad) {
+          setErrorMessage('Debes añadir tu nacionalidad');
+        }else if (!departamento) {
+            setErrorMessage('Debes elegir un departamento');
+        }else if (!municipio) {
+          setErrorMessage('Debes añadir tu municipio');
+        }else if (!direccion) {
+            setErrorMessage('Debes Completar tu dirección');
+        }else{
+          setErrorMessage('No se han llenado los campos');
+        }
+        };
+       
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <>
+    <StatusBar barStyle="light-content"/>
+    <ScrollView style={{flex:1}} contentContainerStyle={styles.ScrollView} scrollEnabled={scrollEnabled} onContentSizeChange={this.onContentSizeChange}>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.background} />
+      <Text style={styles.titleApp}>Registro de pacientes UDB</Text>
+        </SafeAreaView>
+      <Form setNombre={setNombre} setApellido={setApellido} setSexo={setSexo} setDui={setDui} setNit={setNit} setFecha={setFecha}
+              setNacionalidad={setNacionalidad} setDepartamento={setDepartamento} setMunicipio={setMunicipio} setDireccion={setDireccion}/>
+      <Footer></Footer>
+    </ScrollView>
+    
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+  safeArea: {
+    height: 200,
+    alignItems: 'center',
+    },
+    background: {
+    backgroundColor: 'blue',
+    height: 1000,
+    width: '100%',
+    position: 'absolute',
+    zIndex: -1,
+    },
+    titleApp: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginTop: 15,
+    },
 });
-
-export default App;
